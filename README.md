@@ -26,7 +26,6 @@ In your project's Gruntfile, add a section named `commonjs` to the data object p
 grunt.initConfig({
 	commonjs : {
 		build : {
-			//expand: true,
 			cwd : 'src',
 			src : ['**/page/**/*.js'],
 			dest : 'dist',

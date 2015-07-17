@@ -16,17 +16,17 @@ module.exports = function(grunt) {
 	grunt.file.defaultEncoding = 'utf8';
 	grunt.file.preserveBOM = false;
 
-  grunt.registerMultiTask('commonjs', 'commonjs grunt', function() {
-    var options = this.options({
-      punctuation: '.',
-      separator: ', '
-    });
+	grunt.registerMultiTask('commonjs', 'commonjs grunt', function() {
+		var options = this.options({
+			punctuation: '.',
+			separator: ', '
+		});
 
-    this.files.forEach(function(f) {
-      var src = f.src.filter(function(filepath) {
+		this.files.forEach(function(f) {
+			var src = f.src.filter(function(filepath) {
 				var fanaljs = []
 				fanaljs.push(loader)
-				
+
 				var depends = getDepends(filepath)
 				depends.forEach(function(dependpath){
 					fanaljs.push(getDefineJS(dependpath + '.js'))
@@ -39,7 +39,7 @@ module.exports = function(grunt) {
 				grunt.log.oklns('File "' + fanalpath + '" created.');
 
 			})
-		
+
 			function getDepends(filepath, deps){
 				var depends = deps || []
 				var js = getFile(filepath)
@@ -52,12 +52,11 @@ module.exports = function(grunt) {
 						grunt.log.errorlns('Error File "' + filepath + '" 调用自身.');
 						return;
 					}
-												
 
 					if (modName && depends.indexOf(modName) == -1){
-					//	depends.splice(0,0,modName)
+						//	depends.splice(0,0,modName)
 						depends.push(modName)
-						getDepends(modName+'.js', depends)
+							getDepends(modName+'.js', depends)
 					}
 				}
 
@@ -69,16 +68,17 @@ module.exports = function(grunt) {
 					try {
 						var evaFn = new Function('require' , line)
 						evaFn(require)
-						
+
 					}catch(err){
 						grunt.log.errorlns(err, line)
 					}
+
 				})
 
 				//console.log(filepath, depends)
 				return depends
 			}
-	
+
 			function getFile(filepath){
 				return grunt.file.read(path.join(f.cwd, filepath))
 			}
@@ -88,11 +88,11 @@ module.exports = function(grunt) {
 
 			function getDefineJS(filepath){
 				return 'define("' + getName(filepath) + '",function(require){\n'
-								+ getFile(filepath)
-								+ '\n});' 
+						+ getFile(filepath)
+						+ '\n});' 
 			}
 
-    });
-  });
+		});
+	});
 };
 
